@@ -1,0 +1,4 @@
+{
+  "mongoURI": "its_a_secret_to_everybody",
+  "jwtSecret": "its_a_secret_to_everybody"
+}

@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const LoginModal = ({ login, isAuthenticated, buttonLabel, buttonClasses }) => {
+const LoginModal = ({ login, isAuthenticated, buttonLabel, buttonClasses, buttonOnClick }) => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [open, setOpen] = useState(false);
   const { email, password } = formData;
@@ -65,7 +65,10 @@ const LoginModal = ({ login, isAuthenticated, buttonLabel, buttonClasses }) => {
     <>
       <Button
         className={buttonClasses}
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setOpen(true);
+          if (buttonOnClick) buttonOnClick();
+        }}
         startIcon={<PersonIcon />}
         variant="contained"
       >

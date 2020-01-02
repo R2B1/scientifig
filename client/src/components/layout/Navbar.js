@@ -1,10 +1,12 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
@@ -12,6 +14,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import LockIcon from '@material-ui/icons/Lock';
 import AppsIcon from '@material-ui/icons/Apps';
 import AddIcon from '@material-ui/icons/Add';
+import Hidden from '@material-ui/core/Hidden';
+// import withWidth from '@material-ui/core/withWidth';
 import { logout } from "../../actions/auth";
 import { clearFigures } from "../../actions/figure";
 import LoginModal from "../auth/LoginModal";
@@ -20,7 +24,7 @@ import RegisterModal from "../auth/RegisterModal";
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
-    paddingBottom: theme.spacing(2)
+    paddingBottom: theme.spacing(2),
   },
   iconButton: {
     color: "white",
@@ -38,15 +42,25 @@ const useStyles = makeStyles(theme => ({
 const Navbar = ({ auth: { isAuthenticated, loading }, logout, clearFigures }) => {
   const classes = useStyles();
   const [toHome, setToHome] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleMenuClick = e => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleLogout = () => {
     logout();
     clearFigures();
+    handleMenuClose();
     setToHome(true);
   };
 
   const authLinks = (
-    <div>
+    <>
       <Button component={Link} to="/dashboard" startIcon={<AppsIcon />}>
         My Figures
       </Button>
@@ -54,17 +68,63 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout, clearFigures }) =>
         New Figure
       </Button>
       <Button onClick={handleLogout} startIcon={<LockIcon />}>Sign out</Button>
-    </div>
+    </>
+  );
+
+  const authLinksMenu = (
+    <Menu
+      id="nav-menu"
+      anchorEl={anchorEl}
+      keepMounted
+      open={Boolean(anchorEl)}
+      onClose={handleMenuClose}
+    >
+      <MenuItem component={Link} to="/dashboard" onClick={handleMenuClose}>
+        <Button startIcon={<AppsIcon />}>
+          My Figures
+        </Button>
+      </MenuItem>
+      <MenuItem component={Link} to="/editor/new" onClick={handleMenuClose}>
+        <Button startIcon={<AddIcon />}>
+          New Figure
+        </Button>
+      </MenuItem>
+      <MenuItem onClick={handleLogout}>
+        <Button startIcon={<LockIcon />}>Sign out</Button>
+      </MenuItem>
+    </Menu>
   );
 
   const guestLinks = (
-    <div>
+    <>
       <Button component={Link} to="/editor/new" startIcon={<AddIcon />}>
         New Figure
       </Button>
       <RegisterModal buttonLabel="Register" />
       <LoginModal buttonLabel="Sign in" />
-    </div>
+    </>
+  );
+
+  const guestLinksMenu = (
+    <Menu
+      id="nav-menu"
+      anchorEl={anchorEl}
+      keepMounted
+      open={Boolean(anchorEl)}
+      onClose={handleMenuClose}
+    >
+      <MenuItem component={Link} to="/editor/new" onClick={handleMenuClose}>
+        <Button startIcon={<AddIcon />}>
+          New Figure
+        </Button>
+      </MenuItem>
+      <MenuItem>
+        <RegisterModal buttonLabel="Register" buttonOnClick={handleMenuClose} />
+      </MenuItem>
+      <MenuItem>
+        <LoginModal buttonLabel="Sign in" buttonOnClick={handleMenuClose} />
+      </MenuItem>
+    </Menu>
   );
 
   if (toHome) {
@@ -74,25 +134,34 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout, clearFigures }) =>
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="inherit">
+      <AppBar position="fixed" color="inherit">
         <Toolbar variant="dense">
-          <IconButton
-            edge="start"
-            className={classes.iconButton}
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" className={classes.title}>
             <Link className={classes.link} to="/editor/example">
               Scientifig
             </Link>
           </Typography>
           {!loading && (
-            <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
+            <>
+              <Hidden xsDown>
+                {isAuthenticated ? authLinks : guestLinks}
+              </Hidden>
+              <Hidden smUp>
+                <IconButton
+                  edge="start"
+                  className={classes.iconButton}
+                  aria-label="menu"
+                  onClick={handleMenuClick}
+                >
+                  <MenuIcon />
+                </IconButton>
+                {isAuthenticated ? authLinksMenu : guestLinksMenu}
+              </Hidden>
+            </>
           )}
         </Toolbar>
       </AppBar>
+      <Toolbar variant="dense" />
     </div>
   );
 };

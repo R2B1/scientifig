@@ -48,7 +48,8 @@ const RegisterModal = ({
   setAlert,
   register,
   isAuthenticated,
-  buttonLabel
+  buttonLabel,
+  buttonOnClick
 }) => {
   const [formData, setFormData] = useState({
     email: "",
@@ -78,7 +79,13 @@ const RegisterModal = ({
 
   return (
     <>
-      <Button onClick={() => setOpen(true)} startIcon={<PersonAddIcon />}>
+      <Button
+        onClick={() => {
+          setOpen(true);
+          if (buttonOnClick) buttonOnClick();
+        }}
+        startIcon={<PersonAddIcon />}
+      >
         {buttonLabel}
       </Button>
       <Dialog

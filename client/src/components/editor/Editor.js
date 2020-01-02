@@ -98,7 +98,7 @@ const Editor = ({
   isNew,
   isExample,
   isMine,
-  match
+  match,
 }) => {
 
   useEffect(() => {

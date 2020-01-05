@@ -116,6 +116,7 @@ const RegisterModal = ({
                       name="email"
                       autoComplete="off"
                       value={email}
+                      autoFocus
                       onChange={e => handleChange(e)}
                     />
                   </Grid>

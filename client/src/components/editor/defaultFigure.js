@@ -8,7 +8,10 @@ export const defaultFigure = {
       xref: "paper",
       yref: "container",
       x: 0.5,
-      y: 0.95
+      y: 0.95,
+      font: {
+        size: 16
+      }
     },
     margin: { l: 80, r: 40, t: 40, b: 60, pad: 0 },
     autosize: false,
@@ -44,6 +47,7 @@ export const defaultFigure = {
         }
       }
     },
+    showlegend: true,
     legend: {
       xanchor: "right",
       yanchor: "top",

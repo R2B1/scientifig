@@ -20,6 +20,7 @@ import LoginModal from "../auth/LoginModal";
 import { defaultFigure } from "./defaultFigure";
 import Axes from "./controls/Axes";
 import Data from "./controls/Data";
+import Layout from "./controls/Layout";
 import {
   createFigure,
   updateFigure,
@@ -116,7 +117,7 @@ const Editor = ({
       setStateUpdated(true);
       stopLoading();
     } else if (isExample) {
-      getPublicFigure("5dfc76cbc5ee8e36fdb2ba88");
+      getPublicFigure("5e145c0bc13a2d3ce1568fad");
     } else if (isMine) {
       getFigure(match.params.id);
     }
@@ -230,19 +231,11 @@ const Editor = ({
               </ControlPanelBright>
 
               <ControlPanelBright
-                label="Legend"
-                expanded={expanded}
-                onMenuChange={handleMenuChange}
-              >
-                coming soon!
-              </ControlPanelBright>
-
-              <ControlPanelBright
                 label="Layout"
                 expanded={expanded}
                 onMenuChange={handleMenuChange}
               >
-                coming soon!
+                <Layout figState={figState} updateFigState={updateFigState} />
               </ControlPanelBright>
 
               <Card className={classes.card}>

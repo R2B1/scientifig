@@ -136,8 +136,6 @@ const Trace = ({ index, figState, updateFigState }) => {
 
   function getRGB(str) {
     let vals = str.substring(str.indexOf('(') + 1, str.length - 1).split(', ');
-    console.log("string: ", str)
-    console.log("vals: ", vals)
     return {
       'r': Number(vals[0]),
       'g': Number(vals[1]),
